@@ -1,0 +1,32 @@
+{
+  "name": "darlingjs-live-on-promise",
+  "version": "0.0.0",
+  "description": "update pipeline on last solved promise ",
+  "main": "index.js",
+  "dependencies": {
+    "eslint": "^0.24.1",
+    "sinon-chai": "^2.8.0",
+    "chai": "^3.2.0",
+    "sinon": "^1.15.4"
+  },
+  "devDependencies": {
+    "mocha": "^2.2.5"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/darlingjs/darlingjs-live-on-promise.git"
+  },
+  "keywords": [
+    "promise",
+    "darlingjs"
+  ],
+  "author": "Eugene Krevenets <ievgenii.krevenets@gmail.com> (http://hyzhak.github.io)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/darlingjs/darlingjs-live-on-promise/issues"
+  },
+  "homepage": "https://github.com/darlingjs/darlingjs-live-on-promise#readme"
+}
