@@ -4,10 +4,11 @@
   "description": "update pipeline on last solved promise ",
   "main": "index.js",
   "dependencies": {
-    "eslint": "^0.24.1",
-    "sinon-chai": "^2.8.0",
+    "bluebird": "^2.9.34",
     "chai": "^3.2.0",
-    "sinon": "^1.15.4"
+    "eslint": "^0.24.1",
+    "sinon": "^1.15.4",
+    "sinon-chai": "^2.8.0"
   },
   "devDependencies": {
     "mocha": "^2.2.5"
