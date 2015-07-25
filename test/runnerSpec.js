@@ -91,4 +91,12 @@ describe('live on promise', function() {
       })
       .then(done);
   });
+
+  it('should auto start runner on option autostart = true', function() {
+    runner({
+      autostart: true
+    })(step);
+
+    expect(step).to.have.been.calledOnce;
+  });
 });

@@ -7,7 +7,8 @@
 
 'use strict';
 
-module.exports = function () {
+module.exports = function (ops) {
+  ops = ops || {};
   return function (step) {
     var api = {};
 
@@ -45,6 +46,10 @@ module.exports = function () {
 
       return api;
     };
+
+    if (ops.autostart) {
+      api.start();
+    }
 
     return api;
   };
