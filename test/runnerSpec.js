@@ -46,17 +46,17 @@ describe('live on promise', function() {
 
     resolve1();
 
-    setTimeout(function() {
-      expect(step).to.have.been.calledTwice;
-
-      resolve2();
-
-      setTimeout(function() {
+    Promise
+      .delay(100)
+      .then(function() {
+        expect(step).to.have.been.calledTwice;
+      })
+      .then(resolve2)
+      .delay(100)
+      .then(function() {
         expect(step).to.have.been.calledThrice;
-
-        done();
-      }, 100);
-    }, 100);
+      })
+      .then(done);
   });
 
   it('should stop runner on failed promise', function(done) {
@@ -67,15 +67,16 @@ describe('live on promise', function() {
 
     reject1();
 
-    setTimeout(function() {
-      expect(step).to.have.been.calledOnce;
-      done();
-    }, 100);
+    Promise
+      .delay(100)
+      .then(function() {
+        expect(step).to.have.been.calledOnce;
+      })
+      .then(done);
   });
 
   it('should stop update on stop()', function(done) {
-    var r = runner()(step)
-      .start();
+    var r = runner()(step).start();
 
     expect(step).to.have.been.calledOnce;
 
@@ -83,9 +84,11 @@ describe('live on promise', function() {
 
     r.stop();
 
-    setTimeout(function() {
-      expect(step).to.not.have.been.calledTwice;
-      done();
-    }, 100);
+    Promise
+      .delay(100)
+      .then(function() {
+        expect(step).to.not.have.been.calledTwice;
+      })
+      .then(done);
   });
 });
