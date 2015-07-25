@@ -11,10 +11,11 @@
     "sinon-chai": "^2.8.0"
   },
   "devDependencies": {
+    "babel": "^5.8.5",
     "mocha": "^2.2.5"
   },
   "scripts": {
-    "test": "./node_modules/.bin/eslint ./index.js ./test/ && ./node_modules/.bin/mocha"
+    "test": "./node_modules/.bin/eslint ./index.js ./test/ && ./node_modules/.bin/mocha --compilers js:babel/register"
   },
   "repository": {
     "type": "git",

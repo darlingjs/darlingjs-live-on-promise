@@ -8,7 +8,7 @@ var sinonChai = require('sinon-chai');
 
 chai.use(sinonChai);
 
-describe('live on promise', function() {
+describe('live on promise', () => {
   var step,
     resolve1,
     reject1,
@@ -17,15 +17,15 @@ describe('live on promise', function() {
     lastPromise2,
     lastPromise3;
 
-  beforeEach(function() {
-    lastPromise1 = new Promise(function(_resolve_, _reject_) {
+  beforeEach(() => {
+    lastPromise1 = new Promise((_resolve_, _reject_) => {
       resolve1 = _resolve_;
       reject1 = _reject_;
     });
-    lastPromise2 = new Promise(function(_resolve_) {
+    lastPromise2 = new Promise((_resolve_) => {
       resolve2 = _resolve_;
     });
-    lastPromise3 = new Promise(function() {});
+    lastPromise3 = new Promise(() => {});
 
     step = sinon.stub();
     step
@@ -34,11 +34,11 @@ describe('live on promise', function() {
       .onThirdCall().returns(lastPromise3);
   });
 
-  it('should return function', function() {
+  it('should return function', () => {
     expect(runner()).to.be.a('function');
   });
 
-  it('should do not call step function until start is happened', function(done) {
+  it('should do not call step function until start is happened', (done) => {
     runner()(step)
       .start();
 
@@ -59,7 +59,7 @@ describe('live on promise', function() {
       .then(done);
   });
 
-  it('should stop runner on failed promise', function(done) {
+  it('should stop runner on failed promise', (done) => {
     runner()(step)
       .start();
 
@@ -75,7 +75,7 @@ describe('live on promise', function() {
       .then(done);
   });
 
-  it('should stop update on stop()', function(done) {
+  it('should stop update on stop()', (done) => {
     var r = runner()(step).start();
 
     expect(step).to.have.been.calledOnce;
@@ -92,7 +92,7 @@ describe('live on promise', function() {
       .then(done);
   });
 
-  it('should auto start runner on option autostart = true', function() {
+  it('should auto start runner on option autostart = true', () => {
     runner({
       autostart: true
     })(step);
