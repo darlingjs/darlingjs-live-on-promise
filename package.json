@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "babel": "^5.8.5",
+    "darlingjs": "darlingjs/darlingjs#1.0",
     "mocha": "^2.2.5"
   },
   "scripts": {

@@ -7,14 +7,24 @@
 
 'use strict';
 
+var Promise = require('bluebird');
+
 module.exports = function (ops) {
-  ops = ops || {};
+  ops = ops || {
+    //prevent to stuck runner in empty infinity loop and add pause before next try
+    delayOnIdle: 1000
+  };
   return function (step) {
     var api = {};
 
     function iterateStep(previousTime) {
       var newTime = Date.now();
       return step(newTime - previousTime)
+        .then(function(count) {
+          if (count <= 0) {
+            return Promise.delay(ops.delayOnIdle);
+          }
+        })
         .then(function () {
           if (!api.playing) {
             return null;
@@ -31,17 +41,13 @@ module.exports = function (ops) {
 
       api.playing = true;
 
-      iterateStep(Date.now())
+      iterateStep()
         .catch(api.stop);
 
       return api;
     };
 
     api.stop = function () {
-      if (!api.playing) {
-        return api;
-      }
-
       api.playing = false;
 
       return api;

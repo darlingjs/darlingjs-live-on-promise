@@ -1,6 +1,7 @@
 var runner = require('../');
 
 var chai = require('chai');
+var darling = require('darlingjs');
 var expect = chai.expect;
 var Promise = require('bluebird');
 var sinon = require('sinon');
@@ -48,12 +49,12 @@ describe('live on promise', () => {
 
     Promise
       .delay(100)
-      .then(function() {
+      .then(function () {
         expect(step).to.have.been.calledTwice;
       })
       .then(resolve2)
       .delay(100)
-      .then(function() {
+      .then(function () {
         expect(step).to.have.been.calledThrice;
       })
       .then(done);
@@ -69,7 +70,7 @@ describe('live on promise', () => {
 
     Promise
       .delay(100)
-      .then(function() {
+      .then(function () {
         expect(step).to.have.been.calledOnce;
       })
       .then(done);
@@ -86,7 +87,7 @@ describe('live on promise', () => {
 
     Promise
       .delay(100)
-      .then(function() {
+      .then(function () {
         expect(step).to.not.have.been.calledTwice;
       })
       .then(done);
@@ -98,5 +99,81 @@ describe('live on promise', () => {
     })(step);
 
     expect(step).to.have.been.calledOnce;
+  });
+
+  describe('integrated', () => {
+    it('should works for crowded world', (done) => {
+      var handlerResolve1 = null;
+      var handler = sinon.stub();
+
+      handler.onFirstCall().returns(new Promise((_resolve_) => {
+        handlerResolve1 = _resolve_;
+      }));
+
+      handler.onSecondCall().returns(new Promise((_resolve_) => {
+        resolve2 = _resolve_;
+      }));
+
+      var w = darling.world()
+        .pipe({
+          lazy: true,
+          updateAll: handler
+        })
+        .live(runner());
+
+      w.entity({});
+      w.start();
+
+      Promise
+        .delay(100)
+        .then(() => {
+          expect(handler).to.have.been.calledOnce;
+        })
+        .then(handlerResolve1)
+        .delay(100)
+        .then(() => {
+          expect(handler).to.have.been.calledTwice;
+        })
+        .done(done);
+    });
+
+    it('should delay for empty world', (done) => {
+      var handlerResolve1 = null;
+      var handler = sinon.stub();
+
+      handler.onFirstCall().returns(new Promise((_resolve_) => {
+        handlerResolve1 = _resolve_;
+      }));
+
+      handler.onSecondCall().returns(new Promise((_resolve_) => {
+        resolve2 = _resolve_;
+      }));
+
+      var w = darling.world()
+        .pipe({
+          lazy: true,
+          updateAll: handler
+        })
+        .live(runner({
+          delayOnIdle: 100
+        }));
+
+      w.start();
+
+      Promise
+        .delay(100)
+        .then(() => {
+          expect(handler).to.not.have.been.calledOnce;
+        })
+        .delay(100)
+        .then(() => {
+          w.e({});
+        })
+        .delay(100)
+        .then(() => {
+          expect(handler).to.have.been.calledOnce;
+        })
+        .done(done);
+    });
   });
 });
