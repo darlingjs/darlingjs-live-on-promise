@@ -138,16 +138,10 @@ describe('live on promise', () => {
     });
 
     it('should delay for empty world', (done) => {
-      var handlerResolve1 = null;
       var handler = sinon.stub();
 
-      handler.onFirstCall().returns(new Promise((_resolve_) => {
-        handlerResolve1 = _resolve_;
-      }));
-
-      handler.onSecondCall().returns(new Promise((_resolve_) => {
-        resolve2 = _resolve_;
-      }));
+      handler.onFirstCall().returns(new Promise(() => {}));
+      handler.onSecondCall().returns(new Promise(() => {}));
 
       var w = darling.world()
         .pipe({
