@@ -116,7 +116,7 @@ describe('live on promise', () => {
 
       var w = darling.world()
         .pipe({
-          lazy: true,
+          async: true,
           updateAll: handler
         })
         .live(runner());
@@ -145,7 +145,7 @@ describe('live on promise', () => {
 
       var w = darling.world()
         .pipe({
-          lazy: true,
+          async: true,
           updateAll: handler
         })
         .live(runner({
