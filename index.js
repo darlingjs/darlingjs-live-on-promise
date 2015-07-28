@@ -19,7 +19,7 @@ module.exports = function (ops) {
 
     function iterateStep(previousTime) {
       var newTime = Date.now();
-      return step(newTime - previousTime)
+      return step(newTime - previousTime, api.state)
         .then(function(count) {
           if (count <= 0) {
             return Promise.delay(ops.delayOnIdle);
@@ -47,8 +47,26 @@ module.exports = function (ops) {
       return api;
     };
 
-    api.stop = function () {
+    api.state = {};
+
+    /**
+     * stop cycling
+     *
+     * @param stopOps
+     * @returns {{}}
+     */
+    api.stop = function (stopOps) {
+      stopOps = stopOps || {};
+
+      if (!api.playing) {
+        return api;
+      }
+
       api.playing = false;
+
+      if (stopOps.immediate) {
+        api.state.running = false;
+      }
 
       return api;
     };

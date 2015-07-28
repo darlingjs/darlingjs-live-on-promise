@@ -169,5 +169,44 @@ describe('live on promise', () => {
         })
         .done(done);
     });
+
+    it('should stop immediately on', (done) => {
+      var handler1 = sinon.stub().returns(new Promise((_resolve_) => {
+        resolve1 = _resolve_;
+      }));
+      var handler2 = sinon.stub().returns(new Promise(() => {}));
+      stop({immediate: true})
+      var w = darling.world()
+        .pipe({
+          async: true,
+          tap: handler1
+        })
+        .pipe({
+          async: true,
+          tap: handler2
+        })
+        .live(runner({
+          delayOnIdle: 100
+        }));
+
+      w.start();
+
+      Promise
+        .delay(100)
+        .then(() => {
+          expect(handler1).to.have.been.calledOnce;
+        })
+        .delay(100)
+        .then(() => {
+          w.stop({immediate: true});
+          resolve1();
+        })
+        .delay(100)
+        .then(() => {
+          expect(handler1).to.have.been.calledOnce;
+          expect(handler2).to.not.have.been.called;
+        })
+        .done(done);
+    });
   });
 });
