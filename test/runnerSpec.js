@@ -170,12 +170,12 @@ describe('live on promise', () => {
         .done(done);
     });
 
-    it('should stop immediately on', (done) => {
+    it('should stop immediately on stop({immediate: true})', (done) => {
       var handler1 = sinon.stub().returns(new Promise((_resolve_) => {
         resolve1 = _resolve_;
       }));
       var handler2 = sinon.stub().returns(new Promise(() => {}));
-      stop({immediate: true})
+
       var w = darling.world()
         .pipe({
           async: true,
